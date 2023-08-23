@@ -359,7 +359,7 @@ for branch in ${BRANCH_NAME//,/ }; do
         # Start the build
         echo ">> [$(date)] Starting build for $codename, $branch branch" | tee -a "$DEBUG_LOG"
         build_successful=false
-        if (set +eu ; mka "${jobs_arg[@]}" bacon  &&  mka "${jobs_arg[@]}" dist) &>> "$DEBUG_LOG"; then
+        if (set +eu ; mka "${jobs_arg[@]}" bacon  &&  mka "${jobs_arg[@]}" target-files-package) &>> "$DEBUG_LOG"; then
 
           # Move produced files to the main OUT directory
           echo ">> [$(date)] Moving build artifacts for $codename to '$ZIP_DIR/$zipsubdir'" | tee -a "$DEBUG_LOG"
@@ -375,7 +375,7 @@ for branch in ${BRANCH_NAME//,/ }; do
 
           # The flashable `-img.zip` file, with all needed `.img` files
           img_zip_name="lineage-$los_ver-$builddate-$RELEASE_TYPE-$codename-img.zip"
-          cp "lineage_$codename-img-eng*.zip" "$ZIP_DIR/$zipsubdir/$img_zip_name" &>> "$DEBUG_LOG"
+          cp "lineage_$codename-img-eng.$USER.zip" "$ZIP_DIR/$zipsubdir/$img_zip_name" &>> "$DEBUG_LOG"
           files_to_hash+=( "$img_zip_name" )
 
           # recovery & boot `.img` files - (no longer needed? to be removed?)
