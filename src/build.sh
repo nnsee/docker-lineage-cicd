@@ -359,26 +359,25 @@ for branch in ${BRANCH_NAME//,/ }; do
         # Start the build
         echo ">> [$(date)] Starting build for $codename, $branch branch" | tee -a "$DEBUG_LOG"
         build_successful=false
-        if (set +eu ; mka "${jobs_arg[@]}" bacon  &&  mka "${jobs_arg[@]}" target-files-package) &>> "$DEBUG_LOG"; then
+        if (set +eu ; mka "${jobs_arg[@]}" bacon) &>> "$DEBUG_LOG"; then
 
-          # Move produced files to the main OUT directory
+          # make the flashable `-img.zip` file, with all needed `.img` files
+          echo ">> [$(date)] Making flashable -img.zip file, for $codename"  | tee -a "$DEBUG_LOG"
+
+          img_zip_name="lineage-$los_ver-$builddate-$RELEASE_TYPE-$codename-img.zip"
+          merge_target_files --output-img "out/target/product/$img_zip_name" &>> "$DEBUG_LOG"
+
+          # Move produced ZIP files to the main OUT directory
           echo ">> [$(date)] Moving build artifacts for $codename to '$ZIP_DIR/$zipsubdir'" | tee -a "$DEBUG_LOG"
           cd out/target/product/"$codename"
           files_to_hash=()
-
-          # The main ROM `.zip` file
           for build in lineage-*.zip; do
             cp -v system/build.prop "$ZIP_DIR/$zipsubdir/$build.prop" &>> "$DEBUG_LOG"
             mv "$build" "$ZIP_DIR/$zipsubdir/" &>> "$DEBUG_LOG"
             files_to_hash+=( "$build" )
           done
 
-          # The flashable `-img.zip` file, with all needed `.img` files
-          img_zip_name="lineage-$los_ver-$builddate-$RELEASE_TYPE-$codename-img.zip"
-          cp "lineage_$codename-img-eng.$USER.zip" "$ZIP_DIR/$zipsubdir/$img_zip_name" &>> "$DEBUG_LOG"
-          files_to_hash+=( "$img_zip_name" )
-
-          # recovery & boot `.img` files - (no longer needed? to be removed?)
+         # recovery & boot `.img` files - (no longer needed? to be removed?)
           for image in recovery boot; do
             if [ -f "$image.img" ]; then
               recovery_name="lineage-$los_ver-$builddate-$RELEASE_TYPE-$codename-$image.img"
