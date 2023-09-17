@@ -229,7 +229,7 @@ for branch in ${BRANCH_NAME//,/ }; do
         git clean -q -f
         cd ../../..
       fi
-      
+
       if [ -n "$modules_permission_patch" ] && [ "$SIGNATURE_SPOOFING" = "yes" ]; then
         cd packages/modules/Permission
         echo ">> [$(date)] Applying the modules/Permission patch ($modules_permission_patch) to packages/modules/Permission"
@@ -360,10 +360,10 @@ for branch in ${BRANCH_NAME//,/ }; do
         echo ">> [$(date)] Starting build for $codename, $branch branch" | tee -a "$DEBUG_LOG"
         build_successful=false
         if (set +eu ; mka "${jobs_arg[@]}" target-files-package bacon) &>> "$DEBUG_LOG"; then
- 
+
           # make the - img.zip file
           echo ">> [$(date)] Making -img.zip file" | tee -a "$DEBUG_LOG"
-          infile="out/target/product/$codename/PACKAGING/target_files_intermediates/lineage_$codename-target_files-eng.root.zip"
+          infile="out/target/product/$codename/obj/PACKAGING/target_files_intermediates/lineage_$codename-target_files-eng.root.zip"
           outfile="$codename-img.zip"
           img_from_target_files "$infile" "$outfile"  &>> "$DEBUG_LOG"
 
