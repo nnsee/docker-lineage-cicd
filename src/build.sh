@@ -377,6 +377,12 @@ for branch in ${BRANCH_NAME//,/ }; do
             mv "$build" "$ZIP_DIR/$zipsubdir/" &>> "$DEBUG_LOG"
             files_to_hash+=( "$build" )
           done
+
+          # Move -img.zip file to the main OUT directory
+          img_zip_file="lineage-$los_ver-$builddate-$RELEASE_TYPE-$codename-img.zip"
+          mv "outfile" "$ZIP_DIR/$zipsubdir/$img_zip_file"  &>> "$DEBUG_LOG"
+          files_to_hash+=( "$img_zip_file" )
+
           cd "$source_dir/out/target/product/$codename/obj/PACKAGING/target_files_intermediates/lineage_$codename-target_files-eng.root/IMAGES/"
           for image in recovery boot vendor_boot dtbo super_empty vbmeta vendor_kernel_boot; do
             if [ -f "$image.img" ]; then
