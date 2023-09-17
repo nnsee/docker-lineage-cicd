@@ -38,6 +38,10 @@ Docker will produce two files in the `zips` directory:
 
 (Note that the process of flashing using `fastboot` is not documented, is untested, and is done ***at your own risk***.)
 
+## How do I install the LineageOS for MicroG ROM
+
+Follow the LineageOS installation instructions for your device, which can be accessed from the [LineageOS Devices wiki pages](https://wiki.lineageos.org/devices/). If the LineageOS installation instructions require or refer to any `.img` files, these images can be obtained by unzipping the `-img.zip` file mentioned in the previous section.
+
 ## How can I build LineageOS?
 
 This Docker image contains a great number of settings, to allow you to fully
