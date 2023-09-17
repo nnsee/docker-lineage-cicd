@@ -360,6 +360,13 @@ for branch in ${BRANCH_NAME//,/ }; do
         echo ">> [$(date)] Starting build for $codename, $branch branch" | tee -a "$DEBUG_LOG"
         build_successful=false
         if (set +eu ; mka "${jobs_arg[@]}" target-files-package bacon) &>> "$DEBUG_LOG"; then
+ 
+          # make the - img.zip file
+          echo ">> [$(date)] Making -img.zip file" | tee -a "$DEBUG_LOG"
+          infile="out/target/product/$codename/PACKAGING/target_files_intermediates/lineage_$codename-target_files-eng.root.zip"
+          outfile="$codename-img.zip"
+          img_from_target_files "$infile" "$outfile"  &>> "$DEBUG_LOG"
+
 
           # Move produced ZIP files to the main OUT directory
           echo ">> [$(date)] Moving build artifacts for $codename to '$ZIP_DIR/$zipsubdir'" | tee -a "$DEBUG_LOG"
