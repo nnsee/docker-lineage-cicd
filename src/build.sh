@@ -364,7 +364,7 @@ for branch in ${BRANCH_NAME//,/ }; do
           # make the - img.zip file
           echo ">> [$(date)] Making -img.zip file" | tee -a "$DEBUG_LOG"
           infile="out/target/product/$codename/obj/PACKAGING/target_files_intermediates/lineage_$codename-target_files-eng.root.zip"
-          outfile="$codename-img.zip"
+          outfile="out/target/product/$codename/$codename-img.zip"
           img_from_target_files "$infile" "$outfile"  &>> "$DEBUG_LOG"
 
 
