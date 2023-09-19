@@ -361,27 +361,30 @@ for branch in ${BRANCH_NAME//,/ }; do
         build_successful=false
         if (set +eu ; mka "${jobs_arg[@]}" target-files-package bacon) &>> "$DEBUG_LOG"; then
 
+          files_to_hash=()
+
           # make the - img.zip file
           echo ">> [$(date)] Making -img.zip file" | tee -a "$DEBUG_LOG"
           infile="out/target/product/$codename/obj/PACKAGING/target_files_intermediates/lineage_$codename-target_files-eng.root.zip"
           outfile="out/target/product/$codename/$codename-img.zip"
+          img_zip_file="lineage-$los_ver-$builddate-$RELEASE_TYPE-$codename-img.zip"
+          echo "infile: $infile outfile: $outfile img_zip_file: $img_zip_file"  | tee -a "$DEBUG_LOG"
+
           img_from_target_files "$infile" "$outfile"  &>> "$DEBUG_LOG"
+
+          # Move -img.zip file to the main OUT directory
+          mv "$outfile" "$ZIP_DIR/$zipsubdir/$img_zip_file"  &>> "$DEBUG_LOG"
+          files_to_hash+=( "$img_zip_file" )
 
 
           # Move produced ZIP files to the main OUT directory
           echo ">> [$(date)] Moving build artifacts for $codename to '$ZIP_DIR/$zipsubdir'" | tee -a "$DEBUG_LOG"
           cd out/target/product/"$codename"
-          files_to_hash=()
           for build in lineage-*.zip; do
             cp -v system/build.prop "$ZIP_DIR/$zipsubdir/$build.prop" &>> "$DEBUG_LOG"
             mv "$build" "$ZIP_DIR/$zipsubdir/" &>> "$DEBUG_LOG"
             files_to_hash+=( "$build" )
           done
-
-          # Move -img.zip file to the main OUT directory
-          img_zip_file="lineage-$los_ver-$builddate-$RELEASE_TYPE-$codename-img.zip"
-          mv "outfile" "$ZIP_DIR/$zipsubdir/$img_zip_file"  &>> "$DEBUG_LOG"
-          files_to_hash+=( "$img_zip_file" )
 
           cd "$source_dir/out/target/product/$codename/obj/PACKAGING/target_files_intermediates/lineage_$codename-target_files-eng.root/IMAGES/"
           for image in recovery boot vendor_boot dtbo super_empty vbmeta vendor_kernel_boot; do
