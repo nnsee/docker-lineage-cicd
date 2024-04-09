@@ -228,7 +228,7 @@ for branch in ${BRANCH_NAME//,/ }; do
       if [ "$LOCAL_MIRROR" = true ]; then
         ( yes||: ) | repo init -u https://github.com/LineageOS/android.git --reference "$MIRROR_DIR" -b "$branch" --git-lfs &>> "$repo_log"
       else
-        ( yes||: ) | repo init -u https://github.com/LineageOS/android.git -b "$branch" --git-lfs &>> "$repo_log"
+        ( yes||: ) | repo init -u https://github.com/LineageOS/android.git -b 3aa029fecc584a625e96e33ec25507e4bbf52110 --git-lfs &>> "$repo_log"
       fi
     else
       echo ">> [$(date)] Calling repo init disabled"
